@@ -240,6 +240,17 @@ namespace Sensors
             Console.WriteLine($"[FAULT] Fault cleared - returning to normal operation");
         }
 
+        /// <summary>
+        /// Gracefully shutdown sensor and clear history
+        /// </summary>
+        public void ShutdownSensor()
+        {
+            _isRunning = false;
+            _dataHistory.Clear();
+            _faultInjected = false;
+
+            Console.WriteLine($"[SHUTDOWN] Sensor '{Name}' shut down successfully. History cleared.");
+        }
 
         /// <summary>
         /// Get current data history count
