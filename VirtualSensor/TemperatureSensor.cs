@@ -108,5 +108,22 @@ namespace Sensors
             _currentTemperature = temperature;
             return Math.Round(temperature, 2);
         }
+        /// <summary>
+        /// Validate if temperature reading is within acceptable range
+        /// </summary>
+        public bool ValidateData(Reading sensorData)
+        {
+            if (sensorData == null)
+                throw new ArgumentNullException(nameof(sensorData));
+
+            bool isValid = sensorData.Value >= MinValue && sensorData.Value <= MaxValue;
+
+            if (!isValid)
+            {
+                Console.WriteLine($"[VALIDATION] FAILED - Reading {sensorData.Value:F2}°C out of range [{MinValue}, {MaxValue}]");
+            }
+
+            return isValid;
+        }
     }
 }
