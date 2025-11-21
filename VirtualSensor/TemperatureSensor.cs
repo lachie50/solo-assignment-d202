@@ -161,8 +161,24 @@ namespace Sensors
             }
 
             // Store in database for permanent storage
-            // DatabaseService.StoreReading(sensorData);
+            // // // // // // DatabaseService.StoreReading(sensorData);
         }
+
+        /// <summary>
+        /// Apply moving average smoothing to reduce noise
+        /// </summary>
+        public double SmoothData()
+        {
+            if (_dataHistory.Count == 0)
+                return 0;
+
+            int windowSize = Math.Min(SmoothingWindowSize, _dataHistory.Count);
+            var recentReadings = _dataHistory.TakeLast(windowSize);
+            double smoothedValue = recentReadings.Average(r => r.Value);
+
+            return Math.Round(smoothedValue, 2);
+        }
+
         /// <summary>
         /// Get current data history count
         /// </summary>
