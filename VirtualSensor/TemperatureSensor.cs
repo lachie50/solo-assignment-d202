@@ -221,8 +221,6 @@ namespace Sensors
             return exceeded;
         }
 
-
-
         /// <summary>
         /// Get current data history count
         /// </summary>
