@@ -161,7 +161,7 @@ namespace Sensors
             }
 
             // Store in database for permanent storage
-            // // // // // // DatabaseService.StoreReading(sensorData);
+            // DatabaseService.StoreReading(sensorData);
         }
 
         /// <summary>
@@ -177,6 +177,30 @@ namespace Sensors
             double smoothedValue = recentReadings.Average(r => r.Value);
 
             return Math.Round(smoothedValue, 2);
+        }
+
+        /// <summary>
+        /// Detect anomalies based on deviation from recent average
+        /// </summary>
+        public bool DetectAnomaly(Reading sensorData)
+        {
+            if (sensorData == null)
+                throw new ArgumentNullException(nameof(sensorData));
+
+            if (_dataHistory.Count < 5)
+                return false; // Not enough data
+
+            double recentAverage = _dataHistory.TakeLast(10).Average(r => r.Value);
+            double deviation = Math.Abs(sensorData.Value - recentAverage);
+
+            bool isAnomaly = deviation > AnomalyThreshold;
+
+            if (isAnomaly)
+            {
+                Console.WriteLine($"[ANOMALY] Detected! Current: {sensorData.Value:F2}°C, Average: {recentAverage:F2}°C, Deviation: {deviation:F2}°C");
+            }
+
+            return isAnomaly;
         }
 
         /// <summary>
