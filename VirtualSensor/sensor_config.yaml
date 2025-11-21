@@ -1,0 +1,6 @@
+﻿name: DataCenter-Sensor-01
+location: Server Room A
+minValue: 22.0
+maxValue: 24.0
+minThreshold: 21.0
+maxThreshold: 25.0
