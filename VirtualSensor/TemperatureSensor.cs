@@ -204,6 +204,26 @@ namespace Sensors
         }
 
         /// <summary>
+        /// Check if reading exceeds defined thresholds
+        /// </summary>
+        public bool CheckThreshold(Reading sensorData, double minThreshold, double maxThreshold)
+        {
+            if (sensorData == null)
+                throw new ArgumentNullException(nameof(sensorData));
+
+            bool exceeded = sensorData.Value < minThreshold || sensorData.Value > maxThreshold;
+
+            if (exceeded)
+            {
+                Console.WriteLine($"[ALERT] Threshold exceeded! Current: {sensorData.Value:F2}°C, Thresholds: [{minThreshold}, {maxThreshold}]");
+            }
+
+            return exceeded;
+        }
+
+
+
+        /// <summary>
         /// Get current data history count
         /// </summary>
         public int GetHistoryCount()
