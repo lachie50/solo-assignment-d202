@@ -125,5 +125,58 @@ namespace Sensors
 
             return isValid;
         }
+
+        /// <summary>
+        /// Log sensor data with timestamp
+        /// </summary>
+        public void LogData(Reading sensorData)
+        {
+            if (sensorData == null)
+                throw new ArgumentNullException(nameof(sensorData));
+
+            string status = ValidateData(sensorData) ? "VALID" : "INVALID";
+            string logMessage = $"[{sensorData.DateTime:yyyy-MM-dd HH:mm:ss}] {sensorData.SensorName} | {sensorData.Value:F2}°C | Status: {status}";
+
+            Console.WriteLine(logMessage);
+
+            // In a real application, you would also write to a file:
+            // File.AppendAllText("sensor_log.txt", logMessage + Environment.NewLine);
+        }
+
+        /// <summary>
+        /// Store reading in history for analysis and database
+        /// </summary>
+        public void StoreData(Reading sensorData)
+        {
+            if (sensorData == null)
+                throw new ArgumentNullException(nameof(sensorData));
+
+            // Store in memory for quick access
+            _dataHistory.Add(sensorData);
+
+            // Keep only last 100 readings in memory to prevent memory issues
+            if (_dataHistory.Count > 100)
+            {
+                _dataHistory.RemoveAt(0);
+            }
+
+            // Store in database for permanent storage
+            // DatabaseService.StoreReading(sensorData);
+        }
+        /// <summary>
+        /// Get current data history count
+        /// </summary>
+        public int GetHistoryCount()
+        {
+            return _dataHistory.Count;
+        }
+
+        /// <summary>
+        /// Get data history (for testing and analysis)
+        /// </summary>
+        public IReadOnlyList<Reading> GetHistory()
+        {
+            return _dataHistory.AsReadOnly();
+        }
     }
 }
