@@ -59,5 +59,54 @@ namespace Sensors
             Console.WriteLine($"[INIT] Sensor '{Name}' initialized at {Location}");
             Console.WriteLine($"[INIT] Range: {MinValue}°C to {MaxValue}°C");
         }
+        /// <summary>
+        /// Start the sensor operation
+        /// </summary>
+        public void StartSensor()
+        {
+            if (_isRunning)
+            {
+                Console.WriteLine($"[WARNING] Sensor '{Name}' is already running");
+                return;
+            }
+
+            _isRunning = true;
+            Console.WriteLine($"[START] Sensor '{Name}' started successfully");
+        }
+
+        /// <summary>
+        /// Simulate a temperature reading with noise
+        /// </summary>
+        public double SimulateData()
+        {
+            if (!_isRunning)
+                throw new InvalidOperationException("Sensor must be started before simulating data");
+
+            double temperature;
+
+            if (_faultInjected)
+            {
+                // Simulate exponential temperature rise (cooling failure)
+                temperature = _currentTemperature + _random.NextDouble() * 2;
+                if (temperature > MaxValue + 10)
+                    temperature = MaxValue + 10; // Stabilize at higher value
+            }
+            else
+            {
+                // Normal operation: target temperature with noise
+                double targetTemp = (MinValue + MaxValue) / 2;
+                double noise = (_random.NextDouble() * 2 - 1) * NoiseLevel;
+                temperature = targetTemp + noise;
+
+                // Occasional random spikes (5% chance)
+                if (_random.NextDouble() < 0.05)
+                {
+                    temperature += _random.NextDouble() * 3 * (_random.Next(2) == 0 ? 1 : -1);
+                }
+            }
+
+            _currentTemperature = temperature;
+            return Math.Round(temperature, 2);
+        }
     }
 }
