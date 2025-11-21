@@ -222,6 +222,26 @@ namespace Sensors
         }
 
         /// <summary>
+        /// Inject a fault to simulate cooling failure
+        /// </summary>
+        public void InjectFault()
+        {
+            _faultInjected = true;
+            Console.WriteLine($"[FAULT] Cooling failure injected - temperature will rise");
+        }
+
+        /// <summary>
+        /// Clear injected fault
+        /// </summary>
+        public void ClearFault()
+        {
+            _faultInjected = false;
+            _currentTemperature = (MinValue + MaxValue) / 2;
+            Console.WriteLine($"[FAULT] Fault cleared - returning to normal operation");
+        }
+
+
+        /// <summary>
         /// Get current data history count
         /// </summary>
         public int GetHistoryCount()
