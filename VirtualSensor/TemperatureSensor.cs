@@ -32,9 +32,7 @@ namespace Sensors
             _faultInjected = false;
         }
 
-        /// <summary>
         /// Initialize sensor with configuration data
-        /// </summary>
         public void InitializeSensor(string name, string location, double minValue, double maxValue)
         {
             // Validate inputs
@@ -59,9 +57,7 @@ namespace Sensors
             Console.WriteLine($"[INIT] Sensor '{Name}' initialized at {Location}");
             Console.WriteLine($"[INIT] Range: {MinValue}°C to {MaxValue}°C");
         }
-        /// <summary>
         /// Start the sensor operation
-        /// </summary>
         public void StartSensor()
         {
             if (_isRunning)
@@ -74,9 +70,7 @@ namespace Sensors
             Console.WriteLine($"[START] Sensor '{Name}' started successfully");
         }
 
-        /// <summary>
         /// Simulate a temperature reading with noise
-        /// </summary>
         public double SimulateData()
         {
             if (!_isRunning)
@@ -108,9 +102,7 @@ namespace Sensors
             _currentTemperature = temperature;
             return Math.Round(temperature, 2);
         }
-        /// <summary>
         /// Validate if temperature reading is within acceptable range
-        /// </summary>
         public bool ValidateData(Reading sensorData)
         {
             if (sensorData == null)
@@ -126,9 +118,7 @@ namespace Sensors
             return isValid;
         }
 
-        /// <summary>
         /// Log sensor data with timestamp
-        /// </summary>
         public void LogData(Reading sensorData)
         {
             if (sensorData == null)
@@ -138,14 +128,9 @@ namespace Sensors
             string logMessage = $"[{sensorData.DateTime:yyyy-MM-dd HH:mm:ss}] {sensorData.SensorName} | {sensorData.Value:F2}°C | Status: {status}";
 
             Console.WriteLine(logMessage);
-
-            // In a real application, you would also write to a file:
-            // File.AppendAllText("sensor_log.txt", logMessage + Environment.NewLine);
         }
 
-        /// <summary>
         /// Store reading in history for analysis and database
-        /// </summary>
         public void StoreData(Reading sensorData)
         {
             if (sensorData == null)
@@ -160,13 +145,9 @@ namespace Sensors
                 _dataHistory.RemoveAt(0);
             }
 
-            // Store in database for permanent storage
-            // DatabaseService.StoreReading(sensorData);
         }
 
-        /// <summary>
         /// Apply moving average smoothing to reduce noise
-        /// </summary>
         public double SmoothData()
         {
             if (_dataHistory.Count == 0)
@@ -179,9 +160,7 @@ namespace Sensors
             return Math.Round(smoothedValue, 2);
         }
 
-        /// <summary>
         /// Detect anomalies based on deviation from recent average
-        /// </summary>
         public bool DetectAnomaly(Reading sensorData)
         {
             if (sensorData == null)
@@ -203,9 +182,7 @@ namespace Sensors
             return isAnomaly;
         }
 
-        /// <summary>
         /// Check if reading exceeds defined thresholds
-        /// </summary>
         public bool CheckThreshold(Reading sensorData, double minThreshold, double maxThreshold)
         {
             if (sensorData == null)
@@ -221,18 +198,14 @@ namespace Sensors
             return exceeded;
         }
 
-        /// <summary>
         /// Inject a fault to simulate cooling failure
-        /// </summary>
         public void InjectFault()
         {
             _faultInjected = true;
             Console.WriteLine($"[FAULT] Cooling failure injected - temperature will rise");
         }
 
-        /// <summary>
         /// Clear injected fault
-        /// </summary>
         public void ClearFault()
         {
             _faultInjected = false;
@@ -240,9 +213,7 @@ namespace Sensors
             Console.WriteLine($"[FAULT] Fault cleared - returning to normal operation");
         }
 
-        /// <summary>
         /// Gracefully shutdown sensor and clear history
-        /// </summary>
         public void ShutdownSensor()
         {
             _isRunning = false;
@@ -252,17 +223,13 @@ namespace Sensors
             Console.WriteLine($"[SHUTDOWN] Sensor '{Name}' shut down successfully. History cleared.");
         }
 
-        /// <summary>
         /// Get current data history count
-        /// </summary>
         public int GetHistoryCount()
         {
             return _dataHistory.Count;
         }
 
-        /// <summary>
         /// Get data history (for testing and analysis)
-        /// </summary>
         public IReadOnlyList<Reading> GetHistory()
         {
             return _dataHistory.AsReadOnly();
